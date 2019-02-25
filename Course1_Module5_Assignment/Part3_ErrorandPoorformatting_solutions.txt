@@ -1,0 +1,45 @@
+--1. Corrected Answer (Semantic Error)
+SELECT eventrequest.eventno, dateheld, status, estcost
+FROM eventrequest, employee, facility, eventplan
+WHERE estaudience > 5000
+AND eventplan.empno = employee.empno
+AND eventrequest.facno = facility.facno
+AND eventrequest.eventno = eventplan.eventno --missing join condition between eventrequest and eventplan
+AND facname = 'Football stadium'
+AND empname = 'Mary Manager';
+
+--2. Corrected Answer (Redundancy Error) 
+--Not needed group by clause used
+SELECT DISTINCT eventrequest.eventno, dateheld, status, estcost
+FROM eventrequest, eventplan
+WHERE estaudience > 4000
+AND eventplan.eventno = eventrequest.eventno;
+
+--3. Corrected Answer (Semantic Error) 
+--Missing rows due to joins that are not required here
+SELECT DISTINCT eventrequest.eventno, dateheld, status, estcost
+FROM eventrequest, facility --, employee, facility, eventplan
+WHERE estaudience > 5000
+--AND eventplan.empno = employee.empno
+AND eventrequest.facno = facility.facno
+--AND eventplan.eventno = eventrequest.eventno
+AND facname = 'Football stadium';
+
+--4. Corrected Answer (Syntax Error)
+--BETWEEN keyword misspelled and ambiguous error due to eventrequest.columnsnames
+SELECT DISTINCT eventrequest.eventno, dateheld, status, estcost
+FROM eventrequest, employee, eventplan
+WHERE estaudience BETWEEN 5000 AND 10000
+AND eventplan.empno = employee.empno
+AND eventrequest.eventno = eventplan.eventno
+AND empname = 'Mary Manager';
+
+--5. Corrected Answer for poor formatting (No Errors)
+SELECT eventplan.planno, lineno, resname, numberfld, timestart, timeend
+FROM eventrequest, facility, eventplan, eventplanline, resourcetbl
+WHERE estaudience = '10000'
+AND facname = 'Basketball arena'
+AND eventplan.planno = eventplanline.planno 
+AND eventrequest.facno = facility.facno 
+AND eventplanline.resno = resourcetbl.resno
+AND eventrequest.eventno = eventplan.eventno;
